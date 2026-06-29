@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>VoxYouth</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;color:#26215C;background:#fff;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+
+nav{display:flex;align-items:center;justify-content:space-between;padding:16px 48px;background:#fff;border-bottom:0.5px solid #EEEDFE;position:sticky;top:0;z-index:100}
+.logo{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;letter-spacing:-0.5px;color:#26215C;cursor:pointer}
+.logo span{font-style:italic;color:#7F77DD}
+.nav-links{display:flex;gap:28px;font-size:13px;color:#534AB7}
+.nav-links span{cursor:pointer;opacity:.75;transition:opacity .2s}
+.nav-links span:hover,.nav-links span.active-link{opacity:1;color:#26215C}
+.nav-btn{font-size:13px;font-weight:500;background:#26215C;color:#EEEDFE;border:none;border-radius:20px;padding:8px 20px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .2s}
+.nav-btn:hover{background:#534AB7}
+
+.page{display:none}
+.page.active{display:block}
+
+/* ── SHARED ── */
+.hero{background:#26215C;padding:80px 48px 64px;position:relative;overflow:hidden}
+.hero-circle1{position:absolute;top:-80px;right:-80px;width:360px;height:360px;border-radius:50%;border:40px solid rgba(175,169,236,.08)}
+.hero-circle2{position:absolute;top:-20px;right:-20px;width:240px;height:240px;border-radius:50%;border:24px solid rgba(175,169,236,.06)}
+.eyebrow{font-size:11px;font-weight:500;letter-spacing:2.5px;text-transform:uppercase;color:#AFA9EC;margin-bottom:20px;display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:'';display:block;width:24px;height:1px;background:#534AB7}
+.hero h1{font-family:'Playfair Display',serif;font-size:58px;font-weight:900;color:#EEEDFE;line-height:1.06;margin-bottom:22px;max-width:560px}
+.hero h1 em{font-style:italic;color:#AFA9EC}
+.hero p{font-size:15px;font-weight:300;color:#9E98D8;max-width:460px;line-height:1.75;margin-bottom:36px}
+.hero-btns{display:flex;gap:12px}
+.btn-primary{background:#7F77DD;color:#fff;border:none;border-radius:24px;padding:12px 28px;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .2s}
+.btn-primary:hover{background:#534AB7}
+.btn-outline{background:transparent;color:#AFA9EC;border:0.5px solid #534AB7;border-radius:24px;padding:12px 28px;font-size:14px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:border-color .2s}
+.btn-outline:hover{border-color:#AFA9EC;color:#EEEDFE}
+.stats{display:flex;justify-content:center;margin-top:52px;border-top:0.5px solid #3C3489;padding-top:32px}
+.stat{flex:0 0 auto;padding-right:24px;border-right:0.5px solid #3C3489;margin-right:24px}
+.stat:last-child{border-right:none;margin-right:0}
+.stat-num{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:#EEEDFE}
+.stat-label{font-size:12px;color:#7F77DD;margin-top:3px}
+.section-label{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:#7F77DD;font-weight:500;margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.section-label::before{content:'';display:block;width:20px;height:1px;background:#AFA9EC}
+.section-title{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;margin-bottom:40px;color:#26215C;max-width:440px;line-height:1.2}
+.nonpartisan{background:#26215C;padding:40px 48px;display:flex;align-items:center;justify-content:space-between;gap:32px}
+.nonpartisan p{font-family:'Playfair Display',serif;font-size:22px;font-style:italic;color:#AFA9EC;max-width:420px;line-height:1.4}
+.badges{display:flex;gap:10px;flex-shrink:0}
+.badge{border:0.5px solid #534AB7;border-radius:20px;padding:7px 14px;font-size:12px;color:#AFA9EC}
+footer{background:#1a1640;padding:28px 48px;display:flex;align-items:center;justify-content:space-between}
+.footer-logo{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:#EEEDFE}
+.footer-logo span{font-style:italic;color:#AFA9EC}
+.footer-links{display:flex;gap:20px;font-size:12px;color:#534AB7}
+.footer-links span{cursor:pointer;transition:color .2s}
+.footer-links span:hover{color:#AFA9EC}
+footer p{font-size:12px;color:#534AB7;margin-top:4px}
+
+/* ── HOME ── */
+.how{background:#faf9ff;padding:64px 48px;border-bottom:0.5px solid #EEEDFE}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.step{background:#fff;border-radius:12px;padding:28px 24px;border:0.5px solid #EEEDFE}
+.step-num{font-family:'Playfair Display',serif;font-size:36px;font-weight:700;color:#CECBF6;margin-bottom:12px;line-height:1}
+.step h3{font-size:15px;font-weight:500;margin-bottom:8px;color:#26215C}
+.step p{font-size:13px;color:#534AB7;opacity:.8;line-height:1.65}
+.impact{background:#fff;padding:64px 48px;border-bottom:0.5px solid #EEEDFE}
+.impact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.impact-card{background:#faf9ff;border-radius:12px;padding:28px 24px;border:0.5px solid #EEEDFE;text-align:center}
+.impact-card .big{font-family:'Playfair Display',serif;font-size:44px;font-weight:700;color:#7F77DD;line-height:1}
+.impact-card .lbl{font-size:13px;color:#534AB7;margin-top:8px;line-height:1.5;opacity:.85}
+
+/* ── ADVOCACY ── */
+.adv-hero{background:#26215C;padding:64px 48px 52px;position:relative;overflow:hidden}
+.ideas-sec{background:#faf9ff;padding:64px 48px;border-bottom:0.5px solid #EEEDFE}
+.ideas-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:8px}
+.idea-card{background:#fff;border-radius:12px;padding:24px;border:0.5px solid #EEEDFE;transition:border-color .2s}
+.idea-card:hover{border-color:#CECBF6}
+.idea-icon{font-size:28px;margin-bottom:14px}
+.idea-card h3{font-size:14px;font-weight:500;color:#26215C;margin-bottom:8px}
+.idea-card p{font-size:13px;color:#534AB7;line-height:1.65;opacity:.85}
+.idea-tip{display:inline-block;background:#EEEDFE;color:#7F77DD;font-size:11px;border-radius:10px;padding:3px 10px;margin-top:10px;font-weight:500}
+.finder-sec{background:#fff;padding:64px 48px;border-bottom:0.5px solid #EEEDFE}
+.finder-inner{display:grid;grid-template-columns:300px 1fr;gap:40px;align-items:start}
+.filter-panel{background:#faf9ff;border-radius:12px;padding:24px;border:0.5px solid #CECBF6;position:sticky;top:80px}
+.filter-panel h3{font-size:14px;font-weight:500;color:#26215C;margin-bottom:16px}
+.filter-group{margin-bottom:18px}
+.filter-group label{display:block;font-size:11px;font-weight:500;color:#7F77DD;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.filter-chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{background:#fff;border:0.5px solid #CECBF6;border-radius:16px;padding:5px 12px;font-size:12px;color:#534AB7;cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif}
+.chip.active{background:#26215C;color:#EEEDFE;border-color:#26215C}
+.clear-btn{width:100%;background:transparent;border:0.5px solid #CECBF6;border-radius:20px;padding:8px;font-size:13px;color:#7F77DD;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:4px;transition:all .15s}
+.clear-btn:hover{background:#EEEDFE}
+.orgs-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.org-card{background:#fff;border-radius:12px;padding:20px;border:0.5px solid #EEEDFE;transition:border-color .2s}
+.org-card:hover{border-color:#CECBF6}
+.org-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.org-name{font-size:14px;font-weight:500;color:#26215C}
+.org-tag{font-size:11px;background:#EEEDFE;color:#534AB7;border-radius:10px;padding:3px 10px;font-weight:500}
+.org-card p{font-size:13px;color:#534AB7;line-height:1.6;opacity:.85;margin-bottom:12px}
+.org-meta{display:flex;gap:8px;flex-wrap:wrap}
+.org-pill{font-size:11px;background:#faf9ff;border:0.5px solid #EEEDFE;color:#7F77DD;border-radius:10px;padding:2px 9px}
+.org-link{font-size:12px;color:#7F77DD;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:4px;margin-top:10px;transition:color .2s}
+.org-link:hover{color:#534AB7}
+.no-results{grid-column:1/-1;text-align:center;padding:40px;color:#7F77DD;font-size:14px}
+
+/* ── CONTACT PAGE ── */
+.contact-hero{background:#26215C;padding:72px 48px 60px;position:relative;overflow:hidden}
+.contact-hero h1{font-family:'Playfair Display',serif;font-size:52px;font-weight:900;color:#EEEDFE;line-height:1.06;margin-bottom:18px;max-width:520px}
+.contact-hero h1 em{font-style:italic;color:#AFA9EC}
+.contact-hero p{font-size:15px;font-weight:300;color:#9E98D8;max-width:460px;line-height:1.75}
+.contact-body{background:#faf9ff;padding:64px 48px}
+.contact-inner{display:grid;grid-template-columns:1fr 1.4fr;gap:56px;align-items:start}
+.contact-info h2{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:#26215C;margin-bottom:14px;line-height:1.25}
+.contact-info p{font-size:14px;color:#534AB7;line-height:1.75;opacity:.9;margin-bottom:28px}
+.contact-method{display:flex;align-items:flex-start;gap:14px;margin-bottom:22px;padding:18px;background:#fff;border-radius:12px;border:0.5px solid #EEEDFE}
+.cm-icon{width:40px;height:40px;border-radius:10px;background:#EEEDFE;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.cm-label{font-size:11px;font-weight:500;color:#7F77DD;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.cm-value{font-size:14px;color:#26215C;font-weight:500}
+.cm-sub{font-size:12px;color:#7F77DD;margin-top:2px}
+.email-link{color:#7F77DD;text-decoration:none;transition:color .2s}
+.email-link:hover{color:#534AB7}
+.response-note{background:#26215C;border-radius:12px;padding:18px 20px;margin-top:8px}
+.response-note p{font-size:13px;color:#9E98D8;line-height:1.6}
+.response-note strong{color:#AFA9EC;font-weight:500}
+
+/* CONTACT FORM */
+.contact-form-card{background:#fff;border-radius:12px;padding:32px;border:0.5px solid #CECBF6}
+.contact-form-card h3{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:#26215C;margin-bottom:6px}
+.contact-form-card .sub{font-size:13px;color:#7F77DD;margin-bottom:24px}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:11px;font-weight:500;color:#7F77DD;margin-bottom:5px;letter-spacing:1px;text-transform:uppercase}
+.field input,.field textarea,.field select{width:100%;padding:10px 13px;border:0.5px solid #CECBF6;border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;background:#fff;color:#26215C;outline:none;transition:border-color .2s}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:#7F77DD}
+.field textarea{height:110px;resize:none}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.send-btn{width:100%;background:#26215C;color:#EEEDFE;border:none;border-radius:24px;padding:13px;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:4px;transition:background .2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.send-btn:hover{background:#534AB7}
+.success-msg{display:none;text-align:center;padding:32px 16px}
+.success-msg .check{width:56px;height:56px;border-radius:50%;background:#EEEDFE;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 16px}
+.success-msg h3{font-family:'Playfair Display',serif;font-size:22px;color:#26215C;margin-bottom:10px}
+.success-msg p{font-size:14px;color:#534AB7;line-height:1.65}
+</style>
+</head>
+<body>
+
+<nav id="main-nav">
+  <div class="logo" onclick="showPage('home')">Vox<span>Youth</span></div>
+  <div class="nav-links">
+    <span onclick="showPage('home')" id="nl-home">How It Works</span>
+    <span onclick="showPage('advocacy')" id="nl-advocacy">Advocacy</span>
+    <span>About</span>
+  </div>
+  <button class="nav-btn" onclick="showPage('contact')">Get in Contact</button>
+</nav>
+
+<!-- ══════════ HOME ══════════ -->
+<div id="page-home" class="page active">
+  <section class="hero">
+    <div class="hero-circle1"></div>
+    <div class="hero-circle2"></div>
+    <p class="eyebrow">Youth Civic Empowerment</p>
+    <h1>Your generation.<br>Your voice.<br><em>Your policy.</em></h1>
+    <p>VoxYouth connects students directly with legislators — turning your ideas into real policy conversations. No experience needed. No party required. Just something to say.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="showPage('contact')">Get in Contact</button>
+      <button class="btn-outline" onclick="document.getElementById('how-anchor').scrollIntoView({behavior:'smooth'})">Learn How It Works</button>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Of students receive a response</div></div>
+    </div>
+  </section>
+
+  <section class="how" id="how-anchor">
+    <p class="section-label">The Process</p>
+    <h2 class="section-title">From idea to the legislature in three steps</h2>
+    <div class="steps">
+      <div class="step"><div class="step-num">01</div><h3>Submit your idea</h3><p>Share a bill concept, testimony, or advocacy proposal. Any topic, any viewpoint — every perspective is welcome here.</p></div>
+      <div class="step"><div class="step-num">02</div><h3>We refine it together</h3><p>Our trained student team works with you one-on-one to shape your idea into a clear, actionable proposal ready for legislators.</p></div>
+      <div class="step"><div class="step-num">03</div><h3>It reaches the right people</h3><p>We present your proposal to relevant state or district legislators — and guarantee you always receive a real response.</p></div>
+    </div>
+  </section>
+
+  <section class="nonpartisan">
+    <p>"We don't care which side you're on — we care that you show up."</p>
+    <div class="badges"><div class="badge">Nonpartisan</div><div class="badge">Youth-led</div><div class="badge">Action-focused</div></div>
+  </section>
+
+  <footer>
+    <div><div class="footer-logo">Vox<span>Youth</span></div><p>Empowering the next generation of civic leaders.</p></div>
+    <div class="footer-links">
+      <span onclick="showPage('advocacy')">Advocacy</span>
+      <span onclick="showPage('contact')">Contact</span>
+      <span>About</span><span>Privacy</span>
+    </div>
+  </footer>
+</div>
+
+<!-- ══════════ ADVOCACY ══════════ -->
+<div id="page-advocacy" class="page">
+  <section class="adv-hero">
+    <div class="hero-circle1"></div>
+    <p class="eyebrow">Make Your Move</p>
+    <h1 style="font-family:'Playfair Display',serif;font-size:48px;font-weight:900;color:#EEEDFE;line-height:1.08;max-width:540px;margin-bottom:18px">Ideas that <em style="font-style:italic;color:#AFA9EC">spark</em><br>real change.</h1>
+    <p style="font-size:15px;font-weight:300;color:#9E98D8;max-width:480px;line-height:1.75">Advocacy starts with a single action. Explore proven tactics, find organizations working on the issues you care about, and discover where your energy can make the biggest difference.</p>
+  </section>
+
+  <section class="ideas-sec">
+    <p class="section-label">Advocacy Tactics</p>
+    <h2 class="section-title">Ways to make your voice heard</h2>
+    <div class="ideas-grid">
+      <div class="idea-card"><div class="idea-icon">📋</div><h3>Start or sign a petition</h3><p>Petitions show legislators there's community support behind an issue. Even a few hundred signatures from constituents can prompt a real response from an office.</p><span class="idea-tip">Good first step</span></div>
+      <div class="idea-card"><div class="idea-icon">🎤</div><h3>Testify at a public hearing</h3><p>Local school boards, city councils, and state committees all hold public comment sessions. Three minutes of personal testimony from a student carries enormous weight.</p><span class="idea-tip">High impact</span></div>
+      <div class="idea-card"><div class="idea-icon">✉️</div><h3>Write to your representative</h3><p>A personal, specific letter beats a form email every time. Describe how an issue affects you directly and what action you'd like them to take.</p><span class="idea-tip">Accessible</span></div>
+      <div class="idea-card"><div class="idea-icon">📰</div><h3>Submit a letter to the editor</h3><p>Local newspapers still reach decision-makers. An op-ed or letter from a young person on a local issue often gets published and noticed.</p><span class="idea-tip">Amplifies your reach</span></div>
+      <div class="idea-card"><div class="idea-icon">🏫</div><h3>Organize at your school</h3><p>Start a club, host a forum, or bring a speaker to campus. Building a community of informed peers is its own form of civic power.</p><span class="idea-tip">Community builder</span></div>
+      <div class="idea-card"><div class="idea-icon">🗳️</div><h3>Run a voter registration drive</h3><p>If you're 17 or turning 18, you can register now in many states. Help eligible classmates register and understand the issues on their local ballot.</p><span class="idea-tip">Electoral impact</span></div>
+      <div class="idea-card"><div class="idea-icon">📱</div><h3>Use social media strategically</h3><p>Tag your elected officials, share your proposal publicly, or build an audience around a specific issue. Digital pressure is real pressure.</p><span class="idea-tip">Broad reach</span></div>
+      <div class="idea-card"><div class="idea-icon">🤝</div><h3>Meet with your legislator's office</h3><p>You can request a meeting with a staffer or legislator's office. Come prepared with a one-page brief and a clear ask — offices take these meetings.</p><span class="idea-tip">Direct access</span></div>
+      <div class="idea-card"><div class="idea-icon">💡</div><h3>Connect with VoxYouth</h3><p>Have an idea you want to turn into a real proposal? Reach out and our student team will work with you to get it in front of the right people.</p><span class="idea-tip" style="cursor:pointer;background:#26215C;color:#EEEDFE" onclick="showPage('contact')">Get in contact →</span></div>
+    </div>
+  </section>
+
+  <section class="finder-sec">
+    <p class="section-label">Advocacy Finder</p>
+    <h2 class="section-title">Find organizations that match your focus</h2>
+    <div class="finder-inner">
+      <div class="filter-panel">
+        <h3>Filter by interest</h3>
+        <div class="filter-group">
+          <label>Issue Area</label>
+          <div class="filter-chips">
+            <div class="chip active" data-group="issue" data-val="all">All</div>
+            <div class="chip" data-group="issue" data-val="education">Education</div>
+            <div class="chip" data-group="issue" data-val="environment">Environment</div>
+            <div class="chip" data-group="issue" data-val="health">Health</div>
+            <div class="chip" data-group="issue" data-val="justice">Justice</div>
+            <div class="chip" data-group="issue" data-val="housing">Housing</div>
+            <div class="chip" data-group="issue" data-val="civic">Civic Engagement</div>
+          </div>
+        </div>
+        <div class="filter-group">
+          <label>Scope</label>
+          <div class="filter-chips">
+            <div class="chip active" data-group="scope" data-val="all">All</div>
+            <div class="chip" data-group="scope" data-val="local">Local / State</div>
+            <div class="chip" data-group="scope" data-val="national">National</div>
+          </div>
+        </div>
+        <div class="filter-group">
+          <label>Youth-focused</label>
+          <div class="filter-chips">
+            <div class="chip active" data-group="youth" data-val="all">All orgs</div>
+            <div class="chip" data-group="youth" data-val="yes">Youth-led only</div>
+          </div>
+        </div>
+        <button class="clear-btn" onclick="clearFilters()">Clear all filters</button>
+      </div>
+      <div class="orgs-grid" id="orgs-grid"></div>
+    </div>
+  </section>
+
+  <section class="nonpartisan">
+    <p>"Every viewpoint deserves a seat at the table — and a path to action."</p>
+    <div class="badges"><div class="badge">Nonpartisan</div><div class="badge">Youth-led</div><div class="badge">Action-focused</div></div>
+  </section>
+
+  <footer>
+    <div><div class="footer-logo">Vox<span>Youth</span></div><p>Empowering the next generation of civic leaders.</p></div>
+    <div class="footer-links">
+      <span onclick="showPage('home')">Home</span>
+      <span onclick="showPage('contact')">Contact</span>
+      <span>About</span><span>Privacy</span>
+    </div>
+  </footer>
+</div>
+
+<!-- ══════════ CONTACT ══════════ -->
+<div id="page-contact" class="page">
+  <section class="contact-hero">
+    <div class="hero-circle1"></div>
+    <div class="hero-circle2"></div>
+    <p class="eyebrow">Reach Out</p>
+    <h1>Let's start a <em>conversation.</em></h1>
+    <p>Whether you have a policy idea, want to get involved, or just have a question — our team is here and we'd love to hear from you.</p>
+  </section>
+
+  <section class="contact-body">
+    <div class="contact-inner">
+      <!-- LEFT: info -->
+      <div class="contact-info">
+        <h2>How to reach us</h2>
+        <p>We're a student-run organization and we take every message seriously. Reach out however feels right for you.</p>
+
+        <div class="contact-method">
+          <div class="cm-icon">✉️</div>
+          <div>
+            <div class="cm-label">Email us directly</div>
+            <div class="cm-value"><a class="email-link" href="mailto:Kkaleb3010@gmail.com">Kkaleb3010@gmail.com</a></div>
+            <div class="cm-sub">Best for proposals & detailed questions</div>
+          </div>
+        </div>
+
+        <div class="contact-method">
+          <div class="cm-icon">📸</div>
+          <div>
+            <div class="cm-label">Instagram</div>
+            <div class="cm-value"><a class="email-link" href="https://instagram.com/voxyouth" target="_blank">@voxyouth</a></div>
+            <div class="cm-sub">Follow us for updates & stories</div>
+          </div>
+        </div>
+
+        <div class="response-note">
+          <p><strong>Response time:</strong> We respond to all emails within 5 business days. If you're submitting a policy idea, a student advocate will follow up personally.</p>
+        </div>
+      </div>
+
+      <!-- RIGHT: form -->
+      <div class="contact-form-card">
+        <div id="contact-form">
+          <h3>Send us a message</h3>
+          <p class="sub">We'll route your message to the right person on our team.</p>
+          <div class="field-row">
+            <div class="field"><label>First name</label><input type="text" id="cf-first" placeholder="First name"/></div>
+            <div class="field"><label>Last name</label><input type="text" id="cf-last" placeholder="Last name"/></div>
+          </div>
+          <div class="field"><label>Email address</label><input type="email" id="cf-email" placeholder="you@example.com"/></div>
+          <div class="field">
+            <label>I'm reaching out about</label>
+            <select id="cf-subject">
+              <option value="">Select a topic…</option>
+              <option>Submitting a policy idea</option>
+              <option>Getting involved with VoxYouth</option>
+              <option>Partnering with our organization</option>
+              <option>Media or press inquiry</option>
+              <option>General question</option>
+            </select>
+          </div>
+          <div class="field"><label>Message</label><textarea id="cf-message" placeholder="Tell us what's on your mind…"></textarea></div>
+          <button class="send-btn" onclick="handleContact()">
+            <span>Send Message</span>
+            <span>→</span>
+          </button>
+        </div>
+
+        <div class="success-msg" id="contact-success">
+          <div class="check">✓</div>
+          <h3>Message received!</h3>
+          <p>Thanks for reaching out. Someone from our team will get back to you at your email address within 5 business days.</p>
+          <p style="margin-top:12px;font-size:13px">In the meantime, explore our <span style="color:#7F77DD;cursor:pointer;font-weight:500" onclick="showPage('advocacy')">Advocacy page</span> for ideas on how to get started right now.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="nonpartisan">
+    <p>"Your voice matters — and we're here to help it travel further."</p>
+    <div class="badges"><div class="badge">Nonpartisan</div><div class="badge">Youth-led</div><div class="badge">Action-focused</div></div>
+  </section>
+
+  <footer>
+    <div><div class="footer-logo">Vox<span>Youth</span></div><p>Empowering the next generation of civic leaders.</p></div>
+    <div class="footer-links">
+      <span onclick="showPage('home')">Home</span>
+      <span onclick="showPage('advocacy')">Advocacy</span>
+      <span>About</span><span>Privacy</span>
+    </div>
+  </footer>
+</div>
+
+<script>
+const orgs=[
+  {name:"Generation Citizen",issue:"civic",scope:"national",youth:"yes",tag:"Civic Engagement",desc:"Trains students to run action civics projects that tackle real community issues through the political process.",pills:["Youth-led","Action civics","Grades 6–12"],url:"https://generationcitizen.org"},
+  {name:"Sunrise Movement",issue:"environment",scope:"national",youth:"yes",tag:"Climate",desc:"A youth-led political movement pushing for climate action and a Green New Deal through organizing and electoral work.",pills:["Youth-led","Climate","Progressive"],url:"https://sunrisemovement.org"},
+  {name:"Students for Education Reform",issue:"education",scope:"national",youth:"yes",tag:"Education",desc:"Student-driven advocacy for equitable schools, focusing on teacher quality, school choice, and resource equity.",pills:["Youth-led","School equity","National"],url:"https://www.sfer.org"},
+  {name:"Colorado Youth Congress",issue:"civic",scope:"local",youth:"yes",tag:"Civic Engagement",desc:"A Colorado-based program connecting high school students with the state legislature through mock sessions and real bills.",pills:["Colorado","Youth-led","Legislature"],url:"https://coloradoyouthcongress.org"},
+  {name:"League of Women Voters",issue:"civic",scope:"national",youth:"no",tag:"Civic Engagement",desc:"One of the oldest nonpartisan civic organizations in the US. Focuses on voter registration, election integrity, and government accountability.",pills:["Nonpartisan","Voter rights","National"],url:"https://www.lwv.org"},
+  {name:"Teens for Gun Violence Prevention",issue:"justice",scope:"national",youth:"yes",tag:"Public Safety",desc:"Student-led coalition advocating for common-sense gun safety laws at the local, state, and federal level.",pills:["Youth-led","Gun safety","National"],url:"https://teensforgunviolenceprevention.org"},
+  {name:"Colorado Health Foundation",issue:"health",scope:"local",youth:"no",tag:"Health",desc:"Works to improve health outcomes for all Coloradans through policy advocacy, research, and grantmaking.",pills:["Colorado","Health equity","Policy"],url:"https://coloradohealth.org"},
+  {name:"National Low Income Housing Coalition",issue:"housing",scope:"national",youth:"no",tag:"Housing",desc:"Advocates for affordable housing policies at the federal level, with research and action toolkits for local advocates.",pills:["Housing","Federal policy","Research"],url:"https://nlihc.org"},
+  {name:"iVote",issue:"civic",scope:"national",youth:"no",tag:"Civic Engagement",desc:"Nonpartisan organization focused on making it easier for every eligible American to vote through automatic registration and accessible elections.",pills:["Voter access","Nonpartisan","National"],url:"https://ivote.org"},
+  {name:"Student Voice",issue:"education",scope:"national",youth:"yes",tag:"Education",desc:"A national student-led organization pushing for student agency in school policy decisions, from curriculum to discipline.",pills:["Youth-led","Education","Student rights"],url:"https://stuvoice.org"},
+  {name:"Earthjustice",issue:"environment",scope:"national",youth:"no",tag:"Environment",desc:"The nation's largest nonprofit environmental law organization, defending the right to a healthy environment through legal advocacy.",pills:["Legal advocacy","Environment","National"],url:"https://earthjustice.org"},
+  {name:"Colorado Juvenile Defender Coalition",issue:"justice",scope:"local",youth:"no",tag:"Justice",desc:"Advocates for youth in Colorado's juvenile legal system, working to reform policies that affect incarcerated young people.",pills:["Colorado","Juvenile justice","Reform"],url:"https://cjdc.org"},
+];
+
+let activeIssue='all',activeScope='all',activeYouth='all';
+
+function renderOrgs(){
+  const grid=document.getElementById('orgs-grid');
+  const filtered=orgs.filter(o=>{
+    if(activeIssue!=='all'&&o.issue!==activeIssue)return false;
+    if(activeScope!=='all'&&o.scope!==activeScope)return false;
+    if(activeYouth!=='all'&&o.youth!==activeYouth)return false;
+    return true;
+  });
+  if(!filtered.length){grid.innerHTML='<div class="no-results">No organizations match your filters. Try broadening your search.</div>';return;}
+  grid.innerHTML=filtered.map(o=>`
+    <div class="org-card">
+      <div class="org-header"><div class="org-name">${o.name}</div><div class="org-tag">${o.tag}</div></div>
+      <p>${o.desc}</p>
+      <div class="org-meta">${o.pills.map(p=>`<span class="org-pill">${p}</span>`).join('')}</div>
+      <a class="org-link" href="${o.url}" target="_blank">Visit website →</a>
+    </div>`).join('');
+}
+
+document.querySelectorAll('.chip').forEach(chip=>{
+  chip.addEventListener('click',()=>{
+    const grp=chip.dataset.group,val=chip.dataset.val;
+    document.querySelectorAll(`.chip[data-group="${grp}"]`).forEach(c=>c.classList.remove('active'));
+    chip.classList.add('active');
+    if(grp==='issue')activeIssue=val;
+    if(grp==='scope')activeScope=val;
+    if(grp==='youth')activeYouth=val;
+    renderOrgs();
+  });
+});
+
+function clearFilters(){
+  activeIssue=activeScope=activeYouth='all';
+  document.querySelectorAll('.chip').forEach(c=>c.classList.toggle('active',c.dataset.val==='all'));
+  renderOrgs();
+}
+
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function handleContact(){
+  const first=document.getElementById('cf-first').value.trim();
+  const email=document.getElementById('cf-email').value.trim();
+  const msg=document.getElementById('cf-message').value.trim();
+  if(!first||!email||!msg){alert('Please fill in your name, email, and message before sending.');return;}
+  document.getElementById('contact-form').style.display='none';
+  document.getElementById('contact-success').style.display='block';
+}
+
+renderOrgs();
+</script>
+</body>
+</html>
